@@ -6,13 +6,11 @@
 #    By: pitroin <pitroin@student.s19.be>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/29 14:44:35 by pitroin           #+#    #+#              #
-#    Updated: 2024/05/13 12:44:48 by pitroin          ###   ########.fr        #
+#    Updated: 2024/05/13 15:14:53 by pitroin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
-
-PRINTF = libftprintf.a
 
 CC = cc
 

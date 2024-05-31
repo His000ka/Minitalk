@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pitroin <pitroin@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 12:35:37 by pitroin           #+#    #+#             */
-/*   Updated: 2024/05/30 12:09:54 by pitroin          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:54:55 by pitroin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/minitalk.h"
 
-void	handle_signal(int sig)
+void	sigaction_signal(int sig, siginfo_t *info, void *context)
 {
 	static int	c;
 	static int	count = 0;
 
+	(void)context;
 	if (sig == SIGUSR1 || sig == SIGUSR2)
 	{
 		if (sig == SIGUSR1)
@@ -25,6 +26,8 @@ void	handle_signal(int sig)
 		if (count == 8)
 		{
 			ft_printf("%c", c);
+			if (c == '\0')
+				kill(info->si_pid, SIGUSR2);
 			c = 0;
 			count = 0;
 		}
@@ -37,7 +40,7 @@ int	main(void)
 	int					pid;
 
 	pid = getpid();
-	sa.sa_handler = handle_signal;
+	sa.sa_sigaction = sigaction_signal;
 	ft_printf("Bienvenu sur le server de pitroin\n");
 	ft_printf("Numero PID du serveur : %d\n", pid);
 	sigemptyset(&sa.sa_mask);
@@ -45,7 +48,7 @@ int	main(void)
 	if (sigaction(SIGUSR1, &sa, NULL) == -1
 		|| sigaction(SIGUSR2, &sa, NULL) == -1)
 	{
-		perror("sigaction");
+		ft_printf("Erreur sigaction\n");
 		return (1);
 	}
 	while (1)
